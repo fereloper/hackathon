@@ -1,0 +1,317 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>My Page</title> 
+
+        <script type="text/javascript" src="js/phonegap-1.4.1.js"></script>
+        <link rel="stylesheet" href="css/jquery.mobile.custom.min.css" />
+        <link rel="stylesheet" href="css/jquery.mobile-1.2.0.min.css" />
+        <script src="js/jquery.1.8.2.js"></script>
+        <script src="js/jquery.mobile-1.2.0.min.js"></script>
+        <script src="js/jquery-mobile-tabbar.js"></script>
+
+
+        <script type="text/javascript" charset="utf-8">
+
+        
+
+            var pictureSource;   // picture source
+            var destinationType; // sets the format of returned value 
+            var encodingType; 
+
+            // Wait for PhoneGap to connect with the device
+            //
+            document.addEventListener("deviceready",onDeviceReady,false);
+
+            // PhoneGap is ready to be used!
+            //
+            function onDeviceReady() {
+            
+               
+                pictureSource=navigator.camera.PictureSourceType;
+                destinationType=navigator.camera.DestinationType;
+            }
+
+            // Called when a photo is successfully retrieved
+            //
+            function onPhotoDataSuccess(imageData) {
+                // Uncomment to view the base64 encoded image data
+               // console.log(imageData);
+               // alert(imageData);
+               var smallImage = document.getElementById('smallImage');
+
+    // Unhide image elements
+    //
+    smallImage.style.display = 'block';
+
+    // Show the captured photo
+    // The inline CSS rules are used to resize the image
+    //
+    smallImage.src = imageData;
+      
+    //store iamge path into array
+    //images[image_count++]=imageData;
+
+      
+            }
+
+            // Called when a photo is successfully retrieved
+            //
+            function onPhotoURISuccess(imageURI) {
+                // Uncomment to view the image file URI 
+                // console.log(imageURI);
+
+                // Get image handle
+                //
+                var largeImage = document.getElementById('largeImage');
+
+                // Unhide image elements
+                //
+                largeImage.style.display = 'block';
+
+                // Show the captured photo
+                // The inline CSS rules are used to resize the image
+                //
+                largeImage.src = imageURI;
+            }
+
+            // A button will call this function
+            //
+            function capturePhoto() {
+                // Take picture using device camera and retrieve image as base64-encoded string
+                navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
+            }
+    
+            // capture callback
+            var captureSuccess = function(mediaFiles) {
+                var i, path, len;
+                for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                    path = mediaFiles[i].fullPath;
+                    // do something interesting with the file
+                    alert(path);
+                }
+            };
+
+            // capture error callback
+            var captureError = function(error) {
+                navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
+            };
+    
+    
+            // A button will call this function
+            //
+            function captureVideo() {
+                // Launch device video recording application, 
+                // allowing user to capture up to 2 video clips
+                navigator.device.capture.captureVideo(captureSuccess, captureError, {limit: 2});
+            }
+
+
+            // A button will call this function
+            //
+            function capturePhotoEdit() {
+                // Take picture using device camera, allow edit, and retrieve image as base64-encoded string  
+                navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true }); 
+            }
+
+            // A button will call this function
+            //
+            function getPhoto(source) {
+                // Retrieve image file location from specified source
+                navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+                    destinationType: destinationType.FILE_URI,
+        
+                    sourceType: source });
+            }
+            
+            var measure = 0;
+            function addMeasurement(){
+            	measure = measure + 1;
+            	if(measure == 1){
+            		$('#measurement1').css('display', 'block');
+            	}
+            	else if(measure == 2){
+            		$('#measurement2').css('display', 'block');
+            	}
+            	else if(measure == 3){
+            		$('#measurement3').css('display', 'block');
+            		$('#addMeasurementBtn').css('display', 'none');
+            	}
+            }
+
+            // Called if something bad happens.
+            // 
+            function onFail(message) {
+                alert('Failed because: ' + message);
+            }
+            function alertTest(){
+                alert("hello");
+            }
+            function changePage(type){
+                if(type == "hazard"){
+                    $("#hazard").css("display","block");
+                    $("#waste").css("display","none");
+                }else{
+                    $("#hazard").css("display","none");
+                    $("#waste").css("display","block");
+                }
+            }
+            
+           
+
+            
+(function() {
+        var fixgeometry = function() {
+          /* Some orientation changes leave the scroll position at something
+           * that isn't 0,0. This is annoying for user experience. */
+          scroll(0, 0);
+
+          /* Calculate the geometry that our content area should take */
+          var header = $(".header:visible");
+          var footer = $(".footer:visible");
+          var content = $(".content:visible");
+          var viewport_height = $(window).height();
+          
+          var content_height = viewport_height - header.outerHeight() - footer.outerHeight();
+          
+          /* Trim margin/border/padding height */
+          content_height -= (content.outerHeight() - content.height());
+          content.height(content_height);
+        }; /* fixgeometry */
+
+        $(document).ready(function() {
+          $(window).bind("orientationchange resize pageshow", fixgeometry);
+        });
+      })();
+            
+
+        </script>
+
+    </head> 
+    <body> 
+
+        <div data-role="page">
+
+            <div data-role="header" data-position="fixed">
+                
+                <h1>Form Submit</h1>
+                 
+            </div>
+
+            <div data-role="content" id="waste">	
+                <label for="basic">Full Name:</label>
+                <input type="text" name="full_name" id="full_name" value="" data-mini="true" />
+
+                <label for="basic">Email:</label>
+                <input type="text" name="email" id="email" value="" data-mini="true" />
+
+                <label for="basic">Mobile:</label>
+                <input type="text" name="mobile" id="mobile" value="" data-mini="true" />
+
+                <label for="basic">Company Name:</label>
+                <input type="text" name="company_name" id="company_name" value="" data-mini="true" />
+                <div data-role="fieldcontain">
+                    <label for="select-choice-1" class="select">Zilla:</label>
+                    <select name="select-choice-1" id="zillas">
+                        <option value="1">Dhaka</option>
+                        <option value="2">Munshigonj</option>
+                        <option value="3">Gajipur</option>
+                        <option value="4">Mymensing</option>
+
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="select-choice-1" class="select">Thana:</label>
+                    <select name="select-choice-1" id="thanas">
+                        <option value="1">Tongibari</option>
+                        <option value="2">Mohammadpur</option>
+
+                    </select>
+                </div>
+                 <a href="index.html" id="addMeasurementBtn" class="ui-icon-image-uploading" data-role="button" data-theme="b" data-icon="image-uploading" onclick="addMeasurement()">Add Measurement</a>
+                
+                <div id="measurement1" style="display:none;">
+                <div data-role="fieldcontain" data-inline="true"><select name="select-choice-1" id="thanas"><option value="1">pH</option><option value="2">Nitrates</option><option value="3">Phosphorus</option></select></div><input class="textLine" type="text" name="full_name" id="mr1" value="" data-mini="true" data-inline="true"/>
+                </div>
+                
+                
+                <div id="measurement2" style="display:none;">
+                <div data-role="fieldcontain" data-inline="true"><select name="select-choice-1" id="thanas"><option value="1">pH</option><option value="2">Nitrates</option><option value="3">Phosphorus</option></select></div><input class="textLine" type="text" name="full_name" id="mr2" value="" data-mini="true" data-inline="true"/>
+                </div>
+                
+                
+                <div id="measurement3" style="display:none;">
+                <div data-role="fieldcontain" data-inline="true"><select name="select-choice-1" id="thanas"><option value="1">pH</option><option value="2">Nitrates</option><option value="3">Phosphorus</option></select></div><input class="textLine" type="text" name="full_name" id="mr3" value="" data-mini="true" data-inline="true"/>
+                </div>
+                
+                
+                <a href="index.html" data-role="button"  data-icon="image-uploading" class="ui-icon-image-uploading" onclick="capturePhoto()">Upload Image</a>
+                <div id="image-wrapper"><img style="display:none;width:60px;height:60px;" id="smallImage" src="" /></div>
+                <a href="index.html" data-role="button" data-icon="delete" onclick="captureVideo()">Upload Video</a>
+                <div id="video-wrapper"></div>
+                <a href="index.html" data-role="button" data-inline="true" data-icon="delete">Cancel</a>
+                <a href="index.html" data-role="button" data-inline="true" data-theme="b" data-icon="check">Save</a>
+
+                
+               
+
+            </div><!-- /content -->
+
+
+            <div data-role="content" id="hazard" style="display: none;">	
+                <label for="basic">Full Name:</label>
+                <input type="text" name="full_name" id="basic" value="" data-mini="true" />              
+
+                <label for="basic">Company Name:</label>
+                <input type="text" name="email" id="basic" value="" data-mini="true" />
+
+                <div data-role="fieldcontain">
+                    <label for="select-choice-1" class="select">Hazard Type:</label>
+                    <select name="select-choice-1" id="select-choice-1">
+                        <option value="1">Fire</option>
+                        <option value="2">Fatal Accident</option>
+
+                    </select>
+                </div>
+                <a href="index.html" data-role="button"  data-icon="image-uploading" class="ui-icon-image-uploading" onclick="capturePhoto()">Upload Image</a>
+                <div id="image-wrapper"></div>
+                <a href="index.html" data-role="button" data-icon="delete" onclick="captureVideo()">Upload Video</a>
+                <div id="video-wrapper"></div>
+                <a href="index.html" data-role="button" data-inline="true" data-icon="delete">Cancel</a>
+                <a href="index.html" data-role="button" data-inline="true" data-theme="b" data-icon="check">Save</a>
+
+                <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+                <img style="display:none;" id="largeImage" src="" />
+
+            </div><!-- /content -->
+
+
+            <div data-role="footer">
+            
+
+<div data-role="tabbar" >
+  <ul>
+    <li>
+      <a href="#" data-icon="home" onclick='changePage("waste")' class="ui-btn-active">
+        Waste
+      </a>
+    </li>
+    <li>
+      <a href="#" data-icon="star" onclick='changePage("hazard")'>
+        Hazard
+      </a>
+    </li>
+    
+  </ul>
+</div>
+
+            
+            		
+               
+            </div><!-- /footer -->
+
+        </div><!-- /page -->
+
+
+    </body>
+</html>
