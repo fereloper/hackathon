@@ -1,0 +1,12 @@
+/* 
+    Document   : custom
+    Created on : Nov 30, 2012, 6:32:12 PM
+    Author     : feroj
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.ui-icon-image-uploading{
+    background-image: url('images/camera_icon.png');
+}
+
